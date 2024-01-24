@@ -1,0 +1,5 @@
+.addBtn {
+  position: fixed !important;
+  bottom: 5%;
+  right: calc(50% - 200px);
+}

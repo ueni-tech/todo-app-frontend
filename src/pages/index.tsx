@@ -1,5 +1,6 @@
-import styles from "@/styles/Home.module.css";
-import { Box, Center, Checkbox, Flex, Heading, ListItem, UnorderedList } from "@chakra-ui/react";
+import styles from './index.module.css'
+import { Box, Button, Center, Checkbox, Flex, Heading, ListItem, UnorderedList } from "@chakra-ui/react";
+import AddButton from "./componets/AddButton";
 
 export default function Home() {
   return (
@@ -39,6 +40,8 @@ export default function Home() {
           </Box>
         </Box>
       </Center>
+
+      <AddButton className={styles.addBtn} />
     </>
   )
 }
