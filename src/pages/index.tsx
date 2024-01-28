@@ -2,12 +2,18 @@ import styles from './index.module.css'
 import { Box, Button, Center, Checkbox, FormControl, Heading, Input, ListItem, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, UnorderedList, useDisclosure } from "@chakra-ui/react";
 import AddButton from "./componets/AddButton";
 import { ChangeEvent, useRef, useState } from 'react';
-import { v4 as uuid} from 'uuid';
+import { v4 as uuid } from 'uuid';
+
+type Todo = {
+  id: string;
+  title: string;
+}
 
 export default function Home() {
-  const [incompleteTodos, setIncompleteTodos] = useState([{ id: '1', title: "買い物にいく" }, { id: '2', title: "確定申告をする" }, { id: '3', title: "ドットインストールを進める" }]);
-  const [completedTodos, setCompletedTodos] = useState([{ id: '4', title: "Discordの招待" }, { id: '5', title: "MENTAでチャットの返信" }, { id: '6', title: "Reactの復習" }]);
+  const [incompleteTodos, setIncompleteTodos] = useState<Todo[]>([]);
+  const [completedTodos, setCompletedTodos] = useState<Todo[]>([]);
   const [todoTitle, setTodoTitle] = useState('');
+  const [isDisabled, setIsDisabled] = useState(true);
   const initialRef = useRef(null)
 
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -38,7 +44,12 @@ export default function Home() {
   }
 
   const onChangeTodoTitle = (e: ChangeEvent<HTMLInputElement>) => {
-    setTodoTitle(e.target.value)
+    setTodoTitle(e.target.value);
+    if (e.target.value === '' || e.target.value.length > 190) {
+      setIsDisabled(true);
+    } else {
+      setIsDisabled(false);
+    }
   }
 
   const onClickAddTodo = () => {
@@ -87,7 +98,7 @@ export default function Home() {
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>タスクの追加</ModalHeader>
-          <ModalCloseButton/>
+          <ModalCloseButton />
           <ModalBody>
             <FormControl>
               <Input ref={initialRef} placeholder='TODOを入力...' onChange={onChangeTodoTitle} value={todoTitle} />
@@ -95,7 +106,7 @@ export default function Home() {
           </ModalBody>
           <ModalFooter>
             <Button colorScheme='gray' onClick={onClickModalClose}>キャンセル</Button>
-            <Button colorScheme='blue' mx={3} onClick={onClickAddTodo} isDisabled={todoTitle ? false : true} >追加</Button>
+            <Button colorScheme='blue' mx={3} onClick={onClickAddTodo} isDisabled={isDisabled} >追加</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
