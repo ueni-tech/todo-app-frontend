@@ -4,12 +4,12 @@ import { AddIcon } from '@chakra-ui/icons'
 
 type AddButtonProps = {
   className?: string;
-  // 他のpropsもここに追加できます
+  onClick?: () => void;
 };
 
-const AddButton: React.FC<AddButtonProps> = ({className}) => {
+const AddButton: React.FC<AddButtonProps> = ({className, onClick}) => {
   return (
-    <Button className={className} w="80px" h="80px" borderRadius={50} colorScheme='blue'><AddIcon boxSize={10} /></Button>
+    <Button onClick={onClick} className={className} w="80px" h="80px" borderRadius={50} colorScheme='blue'><AddIcon boxSize={10} /></Button>
   )
 }
 
