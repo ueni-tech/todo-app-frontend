@@ -1,8 +1,9 @@
 import styles from './index.module.css'
-import { Box, Button, Center, Checkbox, FormControl, Heading, Input, ListItem, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, UnorderedList, useDisclosure } from "@chakra-ui/react";
+import { Box, Button, Center, Checkbox, FormControl, Heading, Input, ListItem, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Toast, UnorderedList, useDisclosure, useToast } from "@chakra-ui/react";
 import AddButton from "./componets/AddButton";
-import { ChangeEvent, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { v4 as uuid } from 'uuid';
+import axios from 'axios';
 
 type Todo = {
   id: string;
@@ -14,9 +15,15 @@ export default function Home() {
   const [completedTodos, setCompletedTodos] = useState<Todo[]>([]);
   const [todoTitle, setTodoTitle] = useState('');
   const [isDisabled, setIsDisabled] = useState(true);
-  const initialRef = useRef(null)
+  const initialRef = useRef(null);
+  const toast = useToast() ;
 
   const { isOpen, onOpen, onClose } = useDisclosure()
+
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
 
   const onChangeCompleted = (index: number) => {
     const newIncompleteTodos = [...incompleteTodos];
@@ -57,13 +64,19 @@ export default function Home() {
     const newIncompleteTodos = [...incompleteTodos, newTodo];
     setIncompleteTodos(newIncompleteTodos);
     onClickModalClose();
+    toast({
+      title: 'TODOタスクを作成しました',
+      status: 'success',
+      duration: 2000,
+      isClosable: true,
+    })
   }
 
   return (
     <>
       <Center mt={5}>
         <Box w="400px">
-          <Heading size="md">2024年1月24日</Heading>
+          <Heading size="md">{`${year}年${month}月${day}日`}</Heading>
           <Box w="100%" bg="blackAlpha.50" p={5}>
 
             <Box>
