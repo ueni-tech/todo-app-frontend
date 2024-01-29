@@ -1,9 +1,11 @@
 import styles from './index.module.css'
 import { Box, Button, Center, Checkbox, FormControl, Heading, Input, ListItem, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Toast, UnorderedList, useDisclosure, useToast } from "@chakra-ui/react";
-import AddButton from "./componets/AddButton";
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { v4 as uuid } from 'uuid';
 import axios from 'axios';
+
+import AddButton from "../components/AddButton";
+import AddTaskModal from '@/components/modals/AddTaskModal';
 
 type Todo = {
   id: string;
@@ -16,7 +18,7 @@ export default function Home() {
   const [todoTitle, setTodoTitle] = useState('');
   const [isDisabled, setIsDisabled] = useState(true);
   const initialRef = useRef(null);
-  const toast = useToast() ;
+  const toast = useToast();
 
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -107,22 +109,15 @@ export default function Home() {
 
       <AddButton className={styles.addBtn} onClick={onOpen} />
 
-      <Modal isOpen={isOpen} onClose={onClickModalClose} initialFocusRef={initialRef}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>タスクの追加</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <FormControl>
-              <Input ref={initialRef} placeholder='TODOを入力...' onChange={onChangeTodoTitle} value={todoTitle} />
-            </FormControl>
-          </ModalBody>
-          <ModalFooter>
-            <Button colorScheme='gray' onClick={onClickModalClose}>キャンセル</Button>
-            <Button colorScheme='blue' mx={3} onClick={onClickAddTodo} isDisabled={isDisabled} >追加</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      <AddTaskModal
+        isOpen={isOpen}
+        onClickModalClose={onClickModalClose}
+        initialRef={initialRef}
+        onChangeTodoTitle={onChangeTodoTitle}
+        todoTitle={todoTitle}
+        onClickAddTodo={onClickAddTodo}
+        isDisabled={isDisabled}
+      />
     </>
   )
 }
