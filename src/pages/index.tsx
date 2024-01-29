@@ -6,6 +6,7 @@ import axios from 'axios';
 
 import AddButton from "../components/AddButton";
 import AddTaskModal from '@/components/modals/AddTaskModal';
+import Head from 'next/head';
 
 type Todo = {
   id: string;
@@ -76,6 +77,10 @@ export default function Home() {
 
   return (
     <>
+    <Head>
+      <title>Todo-App</title>
+    </Head>
+
       <Center mt={5}>
         <Box w="400px">
           <Heading size="md">{`${year}年${month}月${day}日`}</Heading>
