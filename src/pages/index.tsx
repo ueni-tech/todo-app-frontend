@@ -23,18 +23,18 @@ export default function Home() {
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  useEffect(() => {
-    axios.get('http://localhost/api/todos')
-      .then((res) => {
-        const incompleteTodos = res.data.filter((todo: Todo) => todo.completed == 0);
-        const completedTodos = res.data.filter((todo: Todo) => todo.completed == 1);
-        setIncompleteTodos(incompleteTodos);
-        setCompletedTodos(completedTodos);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-  }, []);
+  // useEffect(() => {
+  //   axios.get('http://localhost/api/todos')
+  //     .then((res) => {
+  //       const incompleteTodos = res.data.filter((todo: Todo) => todo.completed == 0);
+  //       const completedTodos = res.data.filter((todo: Todo) => todo.completed == 1);
+  //       setIncompleteTodos(incompleteTodos);
+  //       setCompletedTodos(completedTodos);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     })
+  // }, []);
 
   const date = new Date();
   const year = date.getFullYear();
