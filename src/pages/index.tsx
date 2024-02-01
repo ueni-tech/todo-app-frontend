@@ -1,18 +1,20 @@
 import styles from './index.module.css'
 import { Box, Button, Center, Checkbox, FormControl, Heading, Input, ListItem, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Toast, UnorderedList, useDisclosure, useToast } from "@chakra-ui/react";
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
-import { v4 as uuid } from 'uuid';
 import axios from 'axios';
 
 import AddButton from "../components/AddButton";
 import AddTaskModal from '@/components/modals/AddTaskModal';
 import Head from 'next/head';
+import useSWR from 'swr';
 
 type Todo = {
   id?: string;
   title: string;
   completed: number;
 }
+
+const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
 export default function Home() {
   const [incompleteTodos, setIncompleteTodos] = useState<Todo[]>([]);
@@ -22,6 +24,16 @@ export default function Home() {
   const initialRef = useRef(null);
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const { data, isLoading, error, mutate } = useSWR('http://localhost/api/todos', fetcher);
+
+  useEffect(() => {
+    if (isLoading) return;
+    const incompleteTodos = data.filter((todo: Todo) => todo.completed == 0);
+    const completedTodos = data.filter((todo: Todo) => todo.completed == 1);
+    setIncompleteTodos(incompleteTodos);
+    setCompletedTodos(completedTodos);
+  }, [data]);
 
   // useEffect(() => {
   //   axios.get('http://localhost/api/todos')
@@ -51,12 +63,6 @@ export default function Home() {
     setCompletedTodos(newCompletedTodos);
 
     axios.put(`http://localhost/api/todos/${id}`, { completed: true })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   }
 
   const onChangeBack = (index: number, id: string) => {
@@ -69,12 +75,6 @@ export default function Home() {
     setCompletedTodos(newCompletedTodos);
 
     axios.put(`http://localhost/api/todos/${id}`, { completed: false })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   }
 
   const onClickModalClose = () => {
