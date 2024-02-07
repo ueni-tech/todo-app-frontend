@@ -25,7 +25,7 @@ export default function Home() {
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const { data, isLoading, error, mutate } = useSWR('http://localhost/api/todos', fetcher);
+  const { data, isLoading, error, mutate } = useSWR('http://api.laravel-v10-starter.localhost/api/todos', fetcher);
 
   useEffect(() => {
     if (isLoading) return;
@@ -62,7 +62,7 @@ export default function Home() {
     setIncompleteTodos(newIncompleteTodos);
     setCompletedTodos(newCompletedTodos);
 
-    axios.put(`http://localhost/api/todos/${id}`, { completed: true })
+    axios.put(`http://api.laravel-v10-starter.localhost/api/todos/${id}`, { completed: true })
   }
 
   const onChangeBack = (index: number, id: string) => {
@@ -74,7 +74,7 @@ export default function Home() {
     setIncompleteTodos(newIncompleteTodos);
     setCompletedTodos(newCompletedTodos);
 
-    axios.put(`http://localhost/api/todos/${id}`, { completed: false })
+    axios.put(`http://api.laravel-v10-starter.localhost/api/todos/${id}`, { completed: false })
   }
 
   const onClickModalClose = () => {
@@ -105,7 +105,7 @@ export default function Home() {
       isClosable: true,
     });
 
-    axios.post('http://localhost/api/todos', newTodo)
+    axios.post('http://api.laravel-v10-starter.localhost/api/todos', newTodo)
       .then((res) => {
         console.log(res);
       })
