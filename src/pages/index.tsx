@@ -27,26 +27,16 @@ export default function Home() {
 
   const { data, isLoading, error, mutate } = useSWR('http://localhost/api/todos', fetcher);
 
+  const TODO_INCOMPLETE = 0;
+  const TODO_COMPLETED = 1;
+
   useEffect(() => {
     if (isLoading) return;
-    const incompleteTodos = data.filter((todo: Todo) => todo.completed == 0);
-    const completedTodos = data.filter((todo: Todo) => todo.completed == 1);
+    const incompleteTodos = data.filter((todo: Todo) => todo.completed === TODO_INCOMPLETE);
+    const completedTodos = data.filter((todo: Todo) => todo.completed === TODO_COMPLETED);
     setIncompleteTodos(incompleteTodos);
     setCompletedTodos(completedTodos);
   }, [data]);
-
-  // useEffect(() => {
-  //   axios.get('http://localhost/api/todos')
-  //     .then((res) => {
-  //       const incompleteTodos = res.data.filter((todo: Todo) => todo.completed == 0);
-  //       const completedTodos = res.data.filter((todo: Todo) => todo.completed == 1);
-  //       setIncompleteTodos(incompleteTodos);
-  //       setCompletedTodos(completedTodos);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     })
-  // }, []);
 
   const date = new Date();
   const year = date.getFullYear();
@@ -92,33 +82,38 @@ export default function Home() {
   }
 
   const onClickAddTodo = () => {
-    const newTodo = { title: todoTitle, completed: 0}
+    const newTodo = { title: todoTitle, completed: 0 }
     const newIncompleteTodos = [...incompleteTodos, newTodo];
     setIncompleteTodos(newIncompleteTodos);
 
     onClickModalClose();
 
-    toast({
-      title: 'TODOタスクを作成しました',
-      status: 'success',
-      duration: 2000,
-      isClosable: true,
-    });
+
 
     axios.post('http://localhost/api/todos', newTodo)
       .then((res) => {
-        console.log(res);
+        toast({
+          title: 'TODOタスクを作成しました',
+          status: 'success',
+          duration: 2000,
+          isClosable: true,
+        });
       })
       .catch((err) => {
-        console.log(err);
+        toast({
+          title: 'TODOタスクの作成に失敗しました',
+          status: 'error',
+          duration: 2000,
+          isClosable: true,
+        });
       });
   }
 
   return (
     <>
-    <Head>
-      <title>Todo-App</title>
-    </Head>
+      <Head>
+        <title>Todo-App</title>
+      </Head>
 
       <Center mt={5}>
         <Box w="400px">
